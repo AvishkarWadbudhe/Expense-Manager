@@ -8,5 +8,19 @@
     <color name="textcolor">#353434</color>
     <color name="green">#4FEB33</color>
 
+    <color name="cat1">#4FEB33</color>
+    <color name="cat2">#3770E2</color>
+    <color name="cat3">#E2F81D</color>
+    <color name="cat4">#6C1FE8</color>
+    <color name="cat5">#21EFAE</color>
+    <color name="cat6">#DA0E8F</color>
+
+
+    <color name="bank_color">#66214C</color>
+    <color name="cash_color">#4D9976</color>
+    <color name="upi_color">#3C4F88</color>
+    <color name="other_color">#7E9244</color>
+
+
 
 </resources>
