@@ -10,10 +10,12 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.expensemanager.Activities.MainActivity;
 import com.example.expensemanager.Adapters.AccountsAdapter;
 import com.example.expensemanager.Adapters.CategoryAdapter;
 import com.example.expensemanager.Model.Account_Model;
 import com.example.expensemanager.Model.Category_Model;
+import com.example.expensemanager.Model.Transaction_Model;
 import com.example.expensemanager.R;
 import com.example.expensemanager.Utils.Constants;
 import com.example.expensemanager.Utils.Helper;
@@ -39,24 +41,29 @@ public class AddTransationFragment extends BottomSheetDialogFragment {
 
     }
 FragmentAddTransationBinding binding;
+
+    Transaction_Model transaction_model ;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding= FragmentAddTransationBinding.inflate(inflater);
-
+transaction_model = new Transaction_Model();
 
         binding.incomeBtn.setOnClickListener(view -> {
             binding.incomeBtn.setBackground(getContext().getDrawable(R.drawable.income_selector));
             binding.expenseBtn.setBackground(getContext().getDrawable(R.drawable.default_selector));
             binding.expenseBtn.setTextColor(getContext().getColor(R.color.textcolor));
             binding.incomeBtn.setTextColor(getContext().getColor(R.color.green));
+
+            transaction_model.setType(Constants.INCOME);
         });
         binding.expenseBtn.setOnClickListener(view -> {
             binding.expenseBtn.setBackground(getContext().getDrawable(R.drawable.expense_selector));
             binding.incomeBtn.setBackground(getContext().getDrawable(R.drawable.default_selector));
             binding.incomeBtn.setTextColor(getContext().getColor(R.color.textcolor));
             binding.expenseBtn.setTextColor(getContext().getColor(R.color.red));
+            transaction_model.setType(Constants.EXPENSE);
         });
 
         binding.date.setOnClickListener(view -> {
@@ -71,6 +78,9 @@ FragmentAddTransationBinding binding;
                 String dateToShow = Helper.formatDate(calendar.getTime());
               //  String dateToShow = dateFormat.format(calendar.getTime());
                 binding.date.setText(dateToShow);
+
+                transaction_model.setDate(calendar.getTime());
+                transaction_model.setId(calendar.getTime().getTime());
 
             });
             datePickerDialog.show();
@@ -89,6 +99,7 @@ FragmentAddTransationBinding binding;
                 @Override
                 public void onCategoryClicked(Category_Model category) {
                     binding.category.setText(category.getCategoryName());
+                    transaction_model.setCategory(category.getCategoryName());
                     categoryDialog.dismiss();
                 }
             });
@@ -118,6 +129,7 @@ FragmentAddTransationBinding binding;
                 @Override
                 public void onAccountSelected(Account_Model account) {
                     binding.account.setText(account.getAccountName());
+                    transaction_model.setAccount(account.getAccountName());
                     accountsDialog.dismiss();
                 }
             });
@@ -127,8 +139,22 @@ FragmentAddTransationBinding binding;
 
 accountsDialog.show();
         });
+        binding.saveTransactionBtn.setOnClickListener(view -> {
+            double amount = Double.parseDouble(binding.amount.getText().toString());
+            String note  =binding.note.getText().toString();
 
+            if(transaction_model.getType().equalsIgnoreCase(Constants.EXPENSE))
+            {
+                transaction_model.setAmount(amount*-1);
+            }else{
+                transaction_model.setAmount(amount);
+            }
+         transaction_model.setNote(note);
 
+            ((MainActivity)getActivity()).viewModel.addTransaction(transaction_model);
+            ((MainActivity)getActivity()).getTransaction();
+            dismiss();
+        });
         return binding.getRoot();
     }
 }

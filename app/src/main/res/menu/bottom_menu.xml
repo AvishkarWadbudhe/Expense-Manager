@@ -9,10 +9,7 @@
         android:id="@+id/stats"
         android:icon="@drawable/ic_chart"
         android:title="Stats" />
-    <item
-        android:id="@+id/account"
-        android:icon="@drawable/ic_accounts"
-        android:title="Account" />
+
     <item
         android:id="@+id/more"
         android:icon="@drawable/ic_more"

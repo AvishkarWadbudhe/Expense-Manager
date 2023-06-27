@@ -1,6 +1,8 @@
 package com.example.expensemanager.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.expensemanager.Activities.MainActivity;
 import com.example.expensemanager.Model.Category_Model;
 import com.example.expensemanager.Model.Transaction_Model;
 import com.example.expensemanager.R;
@@ -17,11 +20,13 @@ import com.example.expensemanager.databinding.ItemTransactionsBinding;
 
 import java.util.ArrayList;
 
+import io.realm.RealmResults;
+
 public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapter.TransactionViewHolder>{
 
     Context context;
-    ArrayList<Transaction_Model>transaction_models;
-    public TransactionsAdapter(Context context, ArrayList<Transaction_Model>transaction_models){
+    RealmResults<Transaction_Model> transaction_models;
+    public TransactionsAdapter(Context context, RealmResults<Transaction_Model>transaction_models){
         this.context = context;
         this.transaction_models = transaction_models;
     }
@@ -52,6 +57,23 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
            holder.binding.transactionAmount.setTextColor(context.getColor(R.color.green));
        }else  if(transaction_model.getType().equalsIgnoreCase("Expense"))
        {  holder.binding.transactionAmount.setTextColor(context.getColor(R.color.red));}
+
+       holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+           @Override
+           public boolean onLongClick(View view) {
+               AlertDialog deleteDialog  =new AlertDialog.Builder(context).create();
+               deleteDialog.setTitle("Delete Transaction");
+               deleteDialog.setMessage("Are you sure to delete this transaction?");
+               deleteDialog.setButton(DialogInterface.BUTTON_POSITIVE,"Yes",((dialogInterface, i) -> {
+                   ((MainActivity)context).viewModel.deleteTransaction(transaction_model);
+               }));
+               deleteDialog.setButton(DialogInterface.BUTTON_NEGATIVE,"No",((dialogInterface, i) -> {
+                   deleteDialog.dismiss();
+               }));
+               deleteDialog.show();
+               return false;
+           }
+       });
     }
 
     @Override
