@@ -42,47 +42,67 @@ public class MainViewModel extends AndroidViewModel {
 
         realm.commitTransaction();
     }
-    public void getTransaction(Calendar calendar)
-    {
-        this.calendar =calendar;
-        calendar.set(Calendar.HOUR_OF_DAY,0);
-        calendar.set(Calendar.MINUTE,0);
-        calendar.set(Calendar.SECOND,0);
-        calendar.set(Calendar.MILLISECOND,0);
+    public void getTransaction(Calendar calendar) {
+        this.calendar = calendar;
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
 
-        RealmResults<Transaction_Model> transaction_models =   realm.where(Transaction_Model.class)
-                .greaterThanOrEqualTo("date",calendar.getTime())
-                        .lessThan("date",new Date(calendar.getTime().getTime()
-                                +(24*60*60*1000)))
-                                .findAll();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-      double income =   realm.where(Transaction_Model.class)
-                .greaterThanOrEqualTo("date",calendar.getTime())
-                .lessThan("date",new Date(calendar.getTime().getTime()
-                        +(24*60*60*1000))).equalTo("type", Constants.INCOME)
-              .sum("amount")
-                      .doubleValue();
+        // Set the calendar to the first day of the month
+        calendar.set(year, month, 1, 0, 0, 0);
+        Date startOfMonth = calendar.getTime();
 
-        double expense =   realm.where(Transaction_Model.class)
-                .greaterThanOrEqualTo("date",calendar.getTime())
-                .lessThan("date",new Date(calendar.getTime().getTime()
-                        +(24*60*60*1000))).equalTo("type", Constants.EXPENSE)
+        // Set the calendar to the last day of the month
+        calendar.set(year, month, calendar.getActualMaximum(Calendar.DAY_OF_MONTH), 23, 59, 59);
+        Date endOfMonth = calendar.getTime();
+
+        // Adjust the start and end dates if the selected date is from yesterday
+        if (calendar.get(Calendar.DAY_OF_MONTH) == day - 1) {
+            startOfMonth = calendar.getTime();
+            endOfMonth = calendar.getTime();
+        }
+
+        RealmResults<Transaction_Model> transaction_models = realm.where(Transaction_Model.class)
+                .greaterThanOrEqualTo("date", startOfMonth)
+                .lessThanOrEqualTo("date", endOfMonth)
+                .findAll();
+
+        double income = realm.where(Transaction_Model.class)
+                .greaterThanOrEqualTo("date", startOfMonth)
+                .lessThanOrEqualTo("date", endOfMonth)
+                .equalTo("type", Constants.INCOME)
                 .sum("amount")
                 .doubleValue();
 
-        double total =   realm.where(Transaction_Model.class)
-                .greaterThanOrEqualTo("date",calendar.getTime())
-                .lessThan("date",new Date(calendar.getTime().getTime()
-                        +(24*60*60*1000)))
+        double expense = realm.where(Transaction_Model.class)
+                .greaterThanOrEqualTo("date", startOfMonth)
+                .lessThanOrEqualTo("date", endOfMonth)
+                .equalTo("type", Constants.EXPENSE)
                 .sum("amount")
                 .doubleValue();
 
-totalIncome.setValue(income);
-totalExpense.setValue(expense);
-totalAmount.setValue(total);
+        double total = realm.where(Transaction_Model.class)
+                .greaterThanOrEqualTo("date", startOfMonth)
+                .lessThanOrEqualTo("date", endOfMonth)
+                .sum("amount")
+                .doubleValue();
 
-   realmResultsMutableLiveData.setValue(transaction_models);
+        totalIncome.setValue(income);
+        totalExpense.setValue(expense);
+        totalAmount.setValue(total);
+
+        realmResultsMutableLiveData.setValue(transaction_models);
     }
+
+
+
+
+
     public void deleteTransaction(Transaction_Model transaction_model)
     {
         realm.beginTransaction();

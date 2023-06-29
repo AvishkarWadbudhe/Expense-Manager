@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">Expense Manager</string>
+    <string name="app_name">Money Manager</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="datebutton">dateButton</string>
+    <string name="current_date">Current Date</string>
 </resources>

@@ -17,8 +17,6 @@ public class Constants {
     public static int SUMMARY = 3;
     public static int NOTES = 4;
 
-    public static int SELECTED_TAB = 0;
-
     public static void setCategories() {
         categories = new ArrayList<>();
         categories.add(new Category_Model("Salary",R.drawable.ic_salary,R.color.cat1));

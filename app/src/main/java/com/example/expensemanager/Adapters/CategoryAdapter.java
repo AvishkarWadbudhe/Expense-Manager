@@ -41,9 +41,7 @@ public CategoryAdapter(Context context, ArrayList<Category_Model> categories, Ca
         holder.binding.categoryIcon.setImageResource(category.getCategoryImage());
         holder.binding.categoryIcon.setBackgroundTintList(context.getColorStateList(category.getCategoryColor()));
 
-        holder.itemView.setOnClickListener(view -> {
-            categoryClickListener.onCategoryClicked(category);
-        });
+        holder.itemView.setOnClickListener(view -> categoryClickListener.onCategoryClicked(category));
     }
 
     @Override

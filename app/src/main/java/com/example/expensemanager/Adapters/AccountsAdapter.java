@@ -41,9 +41,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.Accoun
     public void onBindViewHolder(@NonNull AccountViewHolder holder, int position) {
 Account_Model account = accountArrayList.get(position);
 holder.binding.accountName.setText(account.getAccountName());
-holder.itemView.setOnClickListener(view -> {
-    accountsClickListener.onAccountSelected(account);
-});
+holder.itemView.setOnClickListener(view -> accountsClickListener.onAccountSelected(account));
 
     }
 

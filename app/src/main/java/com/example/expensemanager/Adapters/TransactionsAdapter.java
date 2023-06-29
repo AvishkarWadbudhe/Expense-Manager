@@ -18,8 +18,6 @@ import com.example.expensemanager.Utils.Constants;
 import com.example.expensemanager.Utils.Helper;
 import com.example.expensemanager.databinding.ItemTransactionsBinding;
 
-import java.util.ArrayList;
-
 import io.realm.RealmResults;
 
 public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapter.TransactionViewHolder>{
@@ -58,21 +56,14 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
        }else  if(transaction_model.getType().equalsIgnoreCase("Expense"))
        {  holder.binding.transactionAmount.setTextColor(context.getColor(R.color.red));}
 
-       holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-           @Override
-           public boolean onLongClick(View view) {
-               AlertDialog deleteDialog  =new AlertDialog.Builder(context).create();
-               deleteDialog.setTitle("Delete Transaction");
-               deleteDialog.setMessage("Are you sure to delete this transaction?");
-               deleteDialog.setButton(DialogInterface.BUTTON_POSITIVE,"Yes",((dialogInterface, i) -> {
-                   ((MainActivity)context).viewModel.deleteTransaction(transaction_model);
-               }));
-               deleteDialog.setButton(DialogInterface.BUTTON_NEGATIVE,"No",((dialogInterface, i) -> {
-                   deleteDialog.dismiss();
-               }));
-               deleteDialog.show();
-               return false;
-           }
+       holder.itemView.setOnLongClickListener(view -> {
+           AlertDialog deleteDialog  =new AlertDialog.Builder(context).create();
+           deleteDialog.setTitle("Delete Transaction");
+           deleteDialog.setMessage("Are you sure to delete this transaction?");
+           deleteDialog.setButton(DialogInterface.BUTTON_POSITIVE,"Yes",((dialogInterface, i) -> ((MainActivity)context).viewModel.deleteTransaction(transaction_model)));
+           deleteDialog.setButton(DialogInterface.BUTTON_NEGATIVE,"No",((dialogInterface, i) -> deleteDialog.dismiss()));
+           deleteDialog.show();
+           return false;
        });
     }
 

@@ -7,6 +7,10 @@
     <color name="red">#F61530</color>
     <color name="textcolor">#353434</color>
     <color name="green">#4FEB33</color>
+    <color name="gray">#CDC0C9BF</color>
+    <color name="background_color">#F5F5F5</color>
+
+
 
     <color name="cat1">#4FEB33</color>
     <color name="cat2">#3770E2</color>

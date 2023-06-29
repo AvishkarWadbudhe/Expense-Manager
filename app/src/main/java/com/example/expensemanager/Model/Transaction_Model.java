@@ -2,7 +2,6 @@ package com.example.expensemanager.Model;
 
 import java.util.Date;
 
-import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -10,6 +9,7 @@ public class Transaction_Model extends RealmObject {
 
     private String type,category,account,note;
     private Date date;
+
     private double amount;
 
     @PrimaryKey
