@@ -8,7 +8,6 @@ Expense Manager is an Android application built using Java programming language.
 - Categorize expenses and income into different categories
 - Specify the account from which the expenses were made
 - View summary and detailed reports of expenses and income
-- 
 ## Technologies Used
 
 - Java programming language
